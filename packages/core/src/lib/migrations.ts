@@ -167,6 +167,22 @@ function logWarnings(warnings: string[]) {
   }
 }
 
+export async function deployMigrations(dbUrl: string) {
+  return withMigrate(process.cwd(), async migrate => {
+    let before = Date.now();
+    let migration = await runMigrateWithDbUrl(dbUrl, undefined, () => migrate.applyMigrations());
+    if (migration.appliedMigrationNames.length === 0) {
+      console.info(`✨ The database is already in sync with your Generated Migrations.`);
+    } else {
+      console.info(
+        `✨ Your database is now in sync with your Generated Migrations. Done in ${formatms(
+          Date.now() - before
+        )}`
+      );
+    }
+  });
+}
+
 // TODO: don't have process.exit calls here
 export async function devMigrations(
   dbUrl: string,
