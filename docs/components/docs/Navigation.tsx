@@ -137,23 +137,22 @@ export function NavItem({
   const desktopOpenState = ctx ? ctx.desktopOpenState : -1;
 
   return (
-    <Link href={href} passHref>
-      <a
-        {...(alwaysVisible ? {} : { tabIndex: isMobileNavOpen ? 0 : desktopOpenState })}
-        css={mq({
-          display: 'block',
-          textDecoration: 'none',
-          paddingBottom: '1rem',
-          color: isActive
-            ? 'var(--link)'
-            : `${isPlaceholder ? 'var(--text-disabled)' : 'var(--text)'}`,
-          ':hover': {
-            color: 'var(--link)',
-          },
-        })}
-        {...props}
-      />
-    </Link>
+    <Link
+      href={href}
+      {...(alwaysVisible ? {} : { tabIndex: isMobileNavOpen ? 0 : desktopOpenState })}
+      css={mq({
+        display: 'block',
+        textDecoration: 'none',
+        paddingBottom: '1rem',
+        color: isActive
+          ? 'var(--link)'
+          : `${isPlaceholder ? 'var(--text-disabled)' : 'var(--text)'}`,
+        ':hover': {
+          color: 'var(--link)',
+        },
+      })}
+      {...props}
+    />
   );
 }
 
@@ -170,23 +169,22 @@ export function PrimaryNavItem({ href, children }: PrimaryNavItemProps) {
   const desktopOpenState = ctx ? ctx.desktopOpenState : -1;
 
   return (
-    <Link href={href} passHref>
-      <a
-        tabIndex={isMobileNavOpen ? 0 : desktopOpenState}
-        css={{
-          display: 'block',
-          fontSize: '1rem',
-          color: isActive ? 'var(--link)' : 'var(--text-heading)',
-          marginBottom: '1rem',
-          alignItems: 'center',
-          fontWeight: 400,
-          ':hover': {
-            color: 'var(--link)',
-          },
-        }}
-      >
-        {children}
-      </a>
+    <Link
+      href={href}
+      tabIndex={isMobileNavOpen ? 0 : desktopOpenState}
+      css={{
+        display: 'block',
+        fontSize: '1rem',
+        color: isActive ? 'var(--link)' : 'var(--text-heading)',
+        marginBottom: '1rem',
+        alignItems: 'center',
+        fontWeight: 400,
+        ':hover': {
+          color: 'var(--link)',
+        },
+      }}
+    >
+      {children}
     </Link>
   );
 }
@@ -288,6 +286,9 @@ export function DocsNavigation() {
         <NavItem href="/docs/graphql/filters">
           Query Filters <Badge look="success">Updated</Badge>
         </NavItem>
+      </NavSection>
+      <NavSection title="Reference">
+        <NavItem href="/docs/reference/telemetry">Telemetry</NavItem>
       </NavSection>
     </nav>
     // </NavContextProvider>

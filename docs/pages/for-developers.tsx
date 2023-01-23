@@ -168,9 +168,7 @@ export default function ForDevelopers() {
               you want in your schema and get the matching APIs you need in return.
             </Type>
             <Type as="p" look="body18">
-              <Link href="/docs/config/lists">
-                <a>Lists API reference →</a>
-              </Link>
+              <Link href="/docs/config/lists">Lists API reference →</Link>
             </Type>
           </div>
           <TweetBox user="jvredbrown" img="/assets/jvredbrown.jpg" grad="grad3">
@@ -191,9 +189,7 @@ export default function ForDevelopers() {
               and integrate with your preferred CI tools.
             </Type>
             <Type as="p" look="body18">
-              <Link href="/for-content-management">
-                <a>Keystone for content management →</a>
-              </Link>
+              <Link href="/for-content-management">Keystone for content management →</Link>
             </Type>
           </div>
           <div>
@@ -202,6 +198,10 @@ export default function ForDevelopers() {
               alt="Overlay of Admin UI field panes showing fields for a Post content type. Promotional text overlays show: extensive field options; flexible relationships; powerful sort & filtering."
               width={1975}
               height={1572}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
@@ -252,9 +252,7 @@ export default function ForDevelopers() {
               </li>
             </ul>
             <Type as="p" look="body18">
-              <Link href="/docs/guides/document-field-demo">
-                <a>Try the demo →</a>
-              </Link>
+              <Link href="/docs/guides/document-field-demo">Try the demo →</Link>
             </Type>
           </div>
           <div>
@@ -263,6 +261,10 @@ export default function ForDevelopers() {
               alt="Keystone Document field containing Rich Text content including Twitter embed component, and syntax highlighted code block."
               width={1901}
               height={1629}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
@@ -300,9 +302,7 @@ export default function ForDevelopers() {
                 roles you can configure.
               </Type>
               <Type as="p" look="body18">
-                <Link href="/docs/config/access-control">
-                  <a>Access control API →</a>
-                </Link>
+                <Link href="/docs/config/access-control">Access control API →</Link>
               </Type>
             </li>
             <li>
@@ -314,9 +314,7 @@ export default function ForDevelopers() {
                 One to one. One to many. Many to many. Self-referential. It's all there.
               </Type>
               <Type as="p" look="body18">
-                <Link href="/docs/guides/relationships">
-                  <a>Relationships guide →</a>
-                </Link>
+                <Link href="/docs/guides/relationships">Relationships guide →</Link>
               </Type>
             </li>
             <li>
@@ -329,9 +327,7 @@ export default function ForDevelopers() {
                 terminal.
               </Type>
               <Type as="p" look="body18">
-                <Link href="/docs/guides/cli">
-                  <a>CLI guide →</a>
-                </Link>
+                <Link href="/docs/guides/cli">CLI guide →</Link>
               </Type>
             </li>
             <li>

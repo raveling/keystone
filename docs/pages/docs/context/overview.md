@@ -16,29 +16,30 @@ import type { Context } from '.keystone/types';
 context = {
   // HTTP request object
   req,
+res,
 
   // Query API
   query,
 
   // Internal DB object API
-  db
+  db,
 
   // GraphQL helpers
   graphql: {
     schema,
     run,
     raw,
-  };
+  },
 
   // Session API
   session,
-  startSession,
-  endSession,
+  sessionStrategy
 
   // New context creators
   sudo,
   exitSudo,
   withSession,
+  withRequest,
 
   // Database access
   prisma,
@@ -57,8 +58,8 @@ context = {
 
 ### HTTP request object
 
-`req`: The [IncomingMessage](https://nodejs.org/api/http.html#http_class_http_incomingmessage) object from the HTTP request which called the GraphQL API.
-
+`req`: The [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage) object from the HTTP request.
+`res`: The [ServerResonse](https://nodejs.org/api/http.html#class-httpserverresponse) object for HTTP request.
 ### Query API
 
 `query`: The [Query API](./query), which can be used to perform CRUD operations against your GraphQL API and return a queried value.
@@ -93,18 +94,16 @@ See the [session API](../config/session#session-context) for more details.
 
 `session`: The current session data object.
 
-`startSession`: An internal helper function used by authentication mutations to start a session on a successful login. This should not be called directly.
-
-`endSession`: An internal helper function used by authentication mutations to end a session on logout. This should not be called directly.
+`sessionStrategy`: an object containing functions(`get`, `start` and `end`) that manipulate a session. See the [session API](../config/session#session-context) for more details.
 
 ### New context creators
 
 When using the `context.query`, `context.graphql.run`, and `context.graphql.raw` APIs, access control and session information is passed through to these calls from the `context` object.
 The following functions will create a new `Context` object with this behaviour modified.
 
-`sudo()`: A function which returns a new `Context` object with all access control disabled and all filters enabled for subsequent API calls.
+`sudo()`: A function which returns a new elevated `Context` object with all access control disabled and all filters enabled for subsequent API calls.
 
-`exitSudo()`: A function which returns a new `Context` object with all access control re-enabled for subsequent API calls.
+`withRequest(req, res)`: A function which returns a new user `Context` object with a session and access control based on the `req` given.
 
 `withSession(newSession)`: A function which returns a new `Context` object with the `.session` object replaced with `newSession`.
 

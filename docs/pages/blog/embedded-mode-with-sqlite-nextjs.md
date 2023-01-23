@@ -7,6 +7,10 @@ authorHandle: "https://twitter.com/ronaldaveling"
 metaImageUrl: ""
 ---
 
+{% hint kind="warn" %}
+This post is outdated and there's a newer approach to use Keystone with Next.js applications. Please check out [Use Keystone in Next.js applications](/blog/nextjs-keystone).
+{% /hint %}
+
 In this tutorial, we're going to show you how to embed Keystone and an SQLite database into a **Next.js app**.
 By the end, your app will have a queryable GraphQL endpoint, based on your Keystone schema, running live on Vercel (for free!).
 Content remains editable via the Admin UI in your development environment, with changes being published with each deployment of the app.
@@ -210,9 +214,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
           {/* Render each post with a link to the content page */}
           {posts.map(post => (
             <li key={post.id}>
-              <Link href={`/post/${post.slug}`}>
-                <a>{post.title}</a>
-              </Link>
+              <Link href={`/post/${post.slug}`}>{post.title}</Link>
             </li>
           ))}
         </ul>
@@ -256,7 +258,7 @@ export default function PostPage({ post }: { post: Post }) {
       <main style={{ margin: '3rem' }}>
         <div>
           <Link href="/">
-            <a>&larr; back home</a>
+            &larr; back home
           </Link>
         </div>
         <h1>{post.title}</h1>

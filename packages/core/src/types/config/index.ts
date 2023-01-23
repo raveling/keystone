@@ -1,6 +1,6 @@
 import type { Server } from 'http';
 import type { ListenOptions } from 'net';
-import type { Config } from 'apollo-server-express';
+import type { ApolloServerOptions } from '@apollo/server';
 import { CorsOptions } from 'cors';
 import express from 'express';
 import type { GraphQLSchema } from 'graphql';
@@ -95,10 +95,10 @@ export type KeystoneConfig<TypeInfo extends BaseKeystoneTypeInfo = BaseKeystoneT
    * as the `storage` option for that field.
    */
   storage?: Record<string, StorageConfig>;
+  /** Telemetry boolean to disable telemetry for this project */
+  telemetry?: boolean;
   /** Experimental config options */
   experimental?: {
-    /** Creates a file at `node_modules/.keystone/next/graphql-api` with `default` and `config` exports that can be re-exported in a Next API route */
-    generateNextGraphqlAPI?: boolean;
     /** Adds the internal data structure `experimental.initialisedLists` to the context object.
      * This is not a stable API and may contain breaking changes in `patch` level releases.
      */
@@ -129,19 +129,20 @@ export type DatabaseConfig<TypeInfo extends BaseKeystoneTypeInfo> = {
 export type AdminUIConfig<TypeInfo extends BaseKeystoneTypeInfo> = {
   /** Completely disables the Admin UI */
   isDisabled?: boolean;
+
   /** A function that can be run to validate that the current session should have access to the Admin UI */
   isAccessAllowed?: (context: KeystoneContext<TypeInfo>) => MaybePromise<boolean>;
+
   /** An array of page routes that can be accessed without passing the isAccessAllowed check */
   publicPages?: readonly string[];
-  /** The basePath for the Admin UI App */
-  // FIXME: currently unused
-  // path?: string;
+
   getAdditionalFiles?: readonly ((
     config: KeystoneConfig<TypeInfo>
   ) => MaybePromise<readonly AdminFileToWrite[]>)[];
+
   pageMiddleware?: (args: {
     context: KeystoneContext<TypeInfo>;
-    isValidSession: boolean;
+    isValidSession: boolean; // TODO: rename "isValidSession" to "wasAccessAllowed"?
   }) => MaybePromise<{ kind: 'redirect'; to: string } | void>;
 };
 
@@ -204,7 +205,7 @@ export type GraphQLConfig = {
    *  Additional options to pass into the ApolloServer constructor.
    *  @see https://www.apollographql.com/docs/apollo-server/api/apollo-server/#constructor
    */
-  apolloConfig?: Config;
+  apolloConfig?: Partial<ApolloServerOptions<KeystoneContext>>;
   /**
    * When an error is returned from the GraphQL API, Apollo can include a stacktrace
    * indicating where the error occurred. When Keystone is processing mutations, it

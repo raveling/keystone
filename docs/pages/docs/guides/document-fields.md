@@ -687,6 +687,7 @@ component({
 `@keystone-6/core/component-blocks` ships with a set of form fields for common purposes:
 
 - `fields.text({ label: '...', defaultValue: '...' })`
+- `fields.integer({ label: '...', defaultValue: '...' })`
 - `fields.url({ label: '...', defaultValue: '...' })`
 - `fields.select({ label: '...', options: [{ label:'A', value:'a' }, { label:'B', value:'b' }] defaultValue: 'a' })`
 - `fields.checkbox({ label: '...', defaultValue: false })`

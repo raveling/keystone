@@ -2,7 +2,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react';
 
-import Link from 'next/link';
 import { GitHubExamplesCTA } from '../../components/docs/GitHubExamplesCTA';
 import { Type } from '../../components/primitives/Type';
 import { DocsPage } from '../../components/Page';
@@ -249,6 +248,16 @@ export default function Docs() {
         >
           Example to demonstrate customisation of Keystone's document field and document renderer.
         </Well>
+
+        <Well
+          grad="grad2"
+          heading="Next.js + Keystone"
+          href="https://github.com/keystonejs/keystone/blob/main/examples/nextjs-keystone"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Shows you how to use Keystone as a data engine within Next.js applications.
+        </Well>
       </div>
 
       <Type as="h2" look="heading30" margin="2rem 0 1rem 0" id="deployment-examples">
@@ -258,10 +267,7 @@ export default function Docs() {
       <Type as="p" look="body18" margin="1.25rem 0 1.5rem 0">
         Examples with all the code and documentation you need to get a Keystone project hosted on
         the web. You can find them in the{' '}
-        <Link href="https://github.com/keystonejs/" passHref>
-          <a>Keystone Github Organisation</a>
-        </Link>
-        .
+        <a href="https://github.com/keystonejs/">Keystone Github Organisation</a>.
       </Type>
 
       <div

@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server-errors';
+import { GraphQLError } from 'graphql';
 import {
   BaseListTypeInfo,
   CommonFieldConfig,
@@ -92,7 +92,7 @@ export const document =
 
     const inputResolver = (data: JSONValue | null | undefined): any => {
       if (data === null) {
-        throw new ApolloError('Input error: Document fields cannot be set to null');
+        throw new GraphQLError('Input error: Document fields cannot be set to null');
       }
       if (data === undefined) {
         return data;
@@ -118,6 +118,7 @@ export const document =
       meta.provider,
       {
         ...config,
+        __ksTelemetryFieldTypeName: '@keystone-6/document',
         input: {
           create: {
             arg: graphql.arg({ type: graphql.JSON }),
@@ -275,3 +276,5 @@ function normaliseDocumentFeatures(
   };
   return documentFeatures;
 }
+
+export { structure } from './structure';

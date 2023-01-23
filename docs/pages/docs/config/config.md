@@ -69,7 +69,7 @@ These database types are powered by their corresponding Prisma database provider
   This can also be customised at the list level `db.idField`.
   If you are using `autoincrement`, you can also specify `type: 'BigInt'` on PostgreSQL and MySQL to use BigInts.
 - `prismaPreviewFeatures` (default: `[]`): Enable [Prisma preview features](https://www.prisma.io/docs/concepts/components/preview-features) by providing an array of strings.
-- `additionalPrismaDatasourceProperties` (default: `{}`): Set additional datasource properties like `referentialIntegrity = "prisma"` (required for e.g. PlanetScale) by providing an object with key-value pairs.
+- `additionalPrismaDatasourceProperties` (default: `{}`): Set additional datasource properties like `relationMode = "prisma"` (required for e.g. PlanetScale) by providing an object with key-value pairs.
 - `shadowDatabaseUrl` (default: `undefined`): Enable [shadow databases](https://www.prisma.io/docs/concepts/components/prisma-migrate/shadow-database#cloud-hosted-shadow-databases-must-be-created-manually) for some cloud providers.
 
 ### postgresql
@@ -208,6 +208,7 @@ Options:
 - `cors` (default: `undefined`): Allows you to configure the [cors middleware](https://www.npmjs.com/package/cors#configuration-options) for your Express server.
   If left undefined `cors` will not be used.
 - `port` (default: `3000` ): The port your Express server will listen on.
+- `options` (default: `undefined`): The [`http.createServer`](https://nodejs.org/api/http.html#httpcreateserveroptions-requestlistener) options used by Node.
 - `maxFileSize` (default: `200 * 1024 * 1024`): The maximum file size allowed for uploads. If left undefined, defaults to `200 MiB`
 - `healthCheck` (default: `undefined`): Allows you to configure a health check endpoint on your server.
 - `extendExpressApp` (default: `undefined`): Allows you to extend the express app that Keystone creates.
@@ -220,13 +221,8 @@ export default config({
     port: 3000,
     maxFileSize: 200 * 1024 * 1024,
     healthCheck: true,
-{% if $nextRelease %}
-    extendExpressApp: (app, context) => { /* ... */ },
-    extendHttpServer: (httpServer, context, graphQLSchema) => { /* ... */ },
-{% else /%}
-    extendExpressApp: (app, createContext) => { /* ... */ },
-    extendHttpServer: (httpServer, createContext, graphQLSchema) => { /* ... */ },
-{% /if %}
+extendExpressApp: (app, commonContext) => { /* ... */ },
+    extendHttpServer: (httpServer, commonContext, graphQLSchema) => { /* ... */ },
   },
   /* ... */
 });
@@ -273,11 +269,7 @@ This lets you modify the express app that Keystone creates _before_ the Apollo S
 The function is passed two arguments:
 
 - `app`: The express app keystone has created
-{% if $nextRelease %}
 - `context`: A Keystone Context
-{% else /%}
-- `async createContext(req, res)`: A function you can call to create a Keystone Context for the request
-{% /if %}
 
 For example, you could add your own request logging middleware:
 
@@ -313,23 +305,13 @@ You could also use it to add custom REST endpoints to your server, by creating a
 ```ts
 export default config({
   server: {
-{% if $nextRelease %}
-    extendExpressApp: (app, _context) => {
+extendExpressApp: (app, commonContext) => {
       app.get('/api/users', async (req, res) => {
-        const context = _context.withRequest(req, res);
+        const context = await commonContext.withRequest(req, res);
         const users = await context.query.User.findMany();
         res.json(users);
       });
     },
-{% else /%}
-    extendExpressApp: (app, createContext) => {
-      app.get('/api/users', async (req, res) => {
-        const context = await createContext(req, res);
-        const users = await context.query.User.findMany();
-        res.json(users);
-      });
-    },
-{% /if %}
   },
 });
 ```
@@ -338,18 +320,14 @@ The created context will be bound to the request, including the current visitor'
 
 _ProTip!_: `extendExpressApp` can be `async`
 
-## extendHttpServer
+### extendHttpServer
 
 This lets you interact with the node [http.Server](https://nodejs.org/api/http.html#class-httpserver) that Keystone uses.
 
 The function is passed in 3 arguments:
 
 - `server` - this is the HTTP server that you can then extend
-{% if $nextRelease %}
 - `context`: A Keystone Context
-{% else /%}
-- `async createRequestContext(req, res)`: A function you can call to create a Keystone Context for the request
-{% /if %}
 - `graphqlSchema` - this is the keystone graphql schema that can be used in a WebSocket GraphQL server for subscriptions
 
 For example, this function could be used to listen for `'upgrade'` requests for a WebSocket server when adding support for GraphQL subscriptions
@@ -360,8 +338,7 @@ import { useServer as wsUseServer } from 'graphql-ws/lib/use/ws';
 
 export default config({
   server: {
-{% if $nextRelease %}
-	extendHttpServer: (httpServer, context, graphqlSchema) => {
+extendHttpServer: (httpServer, commonContext, graphqlSchema) => {
 		const wss = new WebSocketServer({
 			server: httpServer,
 			path: '/api/graphql',
@@ -369,16 +346,6 @@ export default config({
 
 		wsUseServer({ schema: graphqlSchema }, wss);
 	},
-{% else /%}
-	extendHttpServer: (httpServer, createRequestContext, graphqlSchema) => {
-		const wss = new WebSocketServer({
-			server: httpServer,
-			path: '/api/graphql',
-		});
-
-		wsUseServer({ schema: graphqlSchema }, wss);
-	},
-{% /if %}
   },
 });
 ```
@@ -394,18 +361,11 @@ import type { SessionStrategy } from '@keystone-6/core/types';
 The `session` config option allows you to configure session management of your Keystone system.
 It has a TypeScript type of `SessionStrategy<any>`.
 
-{% if $nextRelease %}
-In general you will use `SessionStrategy` objects from the `@keystone-6/auth/session` package, rather than writing this yourself.
-{% else /%}
 In general you will use `SessionStrategy` objects from the `@keystone-6/core/session` package, rather than writing this yourself.
-{% /if %}
+
 
 ```typescript
-{% if $nextRelease %}
-import { statelessSessions } from '@keystone-6/auth/session';
-{% else /%}
 import { statelessSessions } from '@keystone-6/core/session';
-{% /if %}
 
 export default config({
   session: statelessSessions({ /* ... */ }),

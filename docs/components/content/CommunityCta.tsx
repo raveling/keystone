@@ -45,6 +45,10 @@ export function CommunityCta(props: HTMLAttributes<HTMLElement>) {
           alt="A map of our awesome contributors"
           width={1518}
           height={928}
+          css={{
+            maxWidth: '100%',
+            height: 'auto',
+          }}
         />
       </div>
       <div

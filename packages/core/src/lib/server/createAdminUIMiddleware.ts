@@ -24,29 +24,44 @@ export async function getNextApp(dev: boolean, projectAdminPath: string): Promis
   return app;
 }
 
+function defaultIsAccessAllowed({ session, sessionStrategy }: KeystoneContext) {
+  if (!sessionStrategy) return true;
+  return session !== undefined;
+}
+
 export function createAdminUIMiddlewareWithNextApp(
   config: KeystoneConfig,
-  context: KeystoneContext,
+  commonContext: KeystoneContext,
   nextApp: NextApp
 ) {
   const handle = nextApp.getRequestHandler();
 
-  const { ui, session } = config;
-  const publicPages = ui?.publicPages ?? [];
+  const {
+    ui: { isAccessAllowed = defaultIsAccessAllowed, pageMiddleware, publicPages = [] } = {},
+  } = config;
+
   return async (req: express.Request, res: express.Response) => {
     const { pathname } = url.parse(req.url);
-    if (pathname?.startsWith('/_next')) {
+
+    if (pathname?.startsWith('/_next') || pathname?.startsWith('/__next')) {
       handle(req, res);
       return;
     }
+
     try {
-      const userContext = await context.withRequest(req, res);
-      const isValidSession = ui?.isAccessAllowed
-        ? await ui.isAccessAllowed(userContext)
-        : session
-        ? context.session !== undefined
-        : true;
-      const shouldRedirect = await ui?.pageMiddleware?.({ context, isValidSession });
+      // do nothing if this is a public page
+      if (publicPages.includes(pathname!)) {
+        handle(req, res);
+        return;
+      }
+
+      const context = await commonContext.withRequest(req, res);
+      const isValidSession = await isAccessAllowed(context); // TODO: rename "isValidSession" to "wasAccessAllowed"?
+      const shouldRedirect = await pageMiddleware?.({
+        context,
+        isValidSession,
+      });
+
       if (shouldRedirect) {
         res.header('Cache-Control', 'no-cache, max-age=0');
         res.header('Location', shouldRedirect.to);
@@ -54,10 +69,11 @@ export function createAdminUIMiddlewareWithNextApp(
         res.send();
         return;
       }
-      if (!isValidSession && !publicPages.includes(url.parse(req.url).pathname!)) {
-        nextApp.render(req, res, '/no-access');
-      } else {
+
+      if (isValidSession) {
         handle(req, res);
+      } else {
+        nextApp.render(req, res, '/no-access');
       }
     } catch (e) {
       console.error('An error occurred handling a request for the Admin UI:', e);

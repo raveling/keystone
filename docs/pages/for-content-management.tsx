@@ -99,9 +99,7 @@ export default function ForOrganisations() {
               </li>
             </ul>
             <Type as="p" look="body18">
-              <Link href="/docs/config/access-control">
-                <a>Access control API →</a>
-              </Link>
+              <Link href="/docs/config/access-control">Access control API →</Link>
             </Type>
           </div>
           <div>
@@ -110,6 +108,10 @@ export default function ForOrganisations() {
               alt="Dropdown selector from Keystone’s Admin UI showing different user roles: Administrator, Editor, Content Manager, Author"
               width={2034}
               height={1300}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
@@ -168,9 +170,7 @@ export default function ForOrganisations() {
               </li>
             </ul>
             <Type as="p" look="body18">
-              <Link href="/docs/fields/overview">
-                <a>Fields API →</a>
-              </Link>
+              <Link href="/docs/fields/overview">Fields API →</Link>
             </Type>
           </div>
           <div>
@@ -179,6 +179,10 @@ export default function ForOrganisations() {
               alt="Overlay of Admin UI field panes showing fields for a Post content type. Promotional text overlays show: custom and virtual fields; flexible relationships; powerful sort & filtering."
               width={1254}
               height={1107}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
@@ -212,9 +216,7 @@ export default function ForOrganisations() {
                 Try the demo <ArrowR />
               </Button>
               <Type look="body18">
-                <Link href="/docs/guides/document-fields">
-                  <a>Read the guide →</a>
-                </Link>
+                <Link href="/docs/guides/document-fields">Read the guide →</Link>
               </Type>
             </div>
             <div>
@@ -223,6 +225,10 @@ export default function ForOrganisations() {
                 alt="Keystone Document field containing Rich Text content including Twitter embed components, and syntax highlighted code block"
                 width={1854}
                 height={1535}
+                css={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
               />
             </div>
           </div>
@@ -334,9 +340,7 @@ export default function ForOrganisations() {
               </li>
             </ul>
             <Type as="p" look="body18">
-              <Link href="/docs/guides/relationships">
-                <a>Relationships guide →</a>
-              </Link>
+              <Link href="/docs/guides/relationships">Relationships guide →</Link>
             </Type>
           </div>
           <div>
@@ -345,6 +349,10 @@ export default function ForOrganisations() {
               alt="2 Admin UI panes showing creation of relationships in place. Author window opens up a Create Post window where Post categories can be selected."
               width={2007}
               height={1727}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
@@ -401,6 +409,10 @@ export default function ForOrganisations() {
               alt="Admin UI browser window showing a tabular a list of Articles with filtration applied to the list. Filter by published status."
               width={1827}
               height={1516}
+              css={{
+                maxWidth: '100%',
+                height: 'auto',
+              }}
             />
           </div>
         </SideBySideSection>
